@@ -27,7 +27,6 @@ server <- function(input, output) {
   })
   
   output$intervalo <- renderPlot({
-    
     li <- input$prop - qnorm(0.5+input$a/2)*sqrt(input$prop*(1-input$prop)/input$n)
     ls <- input$prop + qnorm(0.5+input$a/2)*sqrt(input$prop*(1-input$prop)/input$n)
     
@@ -49,8 +48,25 @@ server <- function(input, output) {
     
     segments(ls, 0, ls, 0.5, lwd = 3, lty = 3, col = color_ls())
     text(ls, 0.5, 'Límite superior', pos = 4)
-    
   })
 
+  output$cobertura <- reactive({
+    
+    input$nsample
+    
+    li <- c()
+    ls <- c()
+    for (i in 1:input$m)
+    {
+      muestra <- rbinom(input$n2, 1, input$prob)
+      prop <- mean(muestra)
+      li[i] <- prop - qnorm(0.5+input$a2/2)*sqrt(prop*(1-prop)/input$n2)
+      ls[i] <- prop + qnorm(0.5+input$a2/2)*sqrt(prop*(1-prop)/input$n2)
+    }
+    aux <- (li <= input$prob) & (ls >= input$prob)
+    res <- round(100*(sum(aux)/input$m), 1) 
+    paste0(res, '%')
+  })
+  
   
 }
