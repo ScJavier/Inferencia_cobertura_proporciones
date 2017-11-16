@@ -1,6 +1,6 @@
 library(shiny)
 
-ui <- navbarPage("Intervalos para proporciones", fluid = T,
+ui <- navbarPage("Intervalos para proporciones", fluid = T, theme = 'bootstrap.css',
                  tabPanel("Validez",
                           fluidRow(
                             column(4,
